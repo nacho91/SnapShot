@@ -17,6 +17,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    productFlavors {
+
+        def BASE_URL = "BASE_URL"
+        def API_KEY = "API_KEY"
+
+        prod {
+            buildConfigField "String", BASE_URL, "\"https://api.flickr.com/services/rest/\""
+            buildConfigField "String", API_KEY, "\"51bc57f735772063ff2764d10f408f93\""
+        }
+    }
 }
 
 dependencies {
@@ -26,4 +37,8 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:24.2.1'
     testCompile 'junit:junit:4.12'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
 }
