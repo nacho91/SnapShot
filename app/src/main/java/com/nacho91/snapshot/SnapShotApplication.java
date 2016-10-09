@@ -4,6 +4,10 @@ import android.app.Application;
 
 import com.nacho91.snapshot.api.ApiManager;
 import com.nacho91.snapshot.api.SnapShotApi;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -24,6 +28,8 @@ public class SnapShotApplication extends Application {
         super.onCreate();
 
         apiManager = new ApiManager(provideSubteApi(provideOkHttpClient()));
+
+        initImageLoader();
     }
 
     private OkHttpClient provideOkHttpClient(){
@@ -47,6 +53,23 @@ public class SnapShotApplication extends Application {
                 .build();
 
         return retrofit.create(SnapShotApi.class);
+    }
+
+    private void initImageLoader(){
+
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .resetViewBeforeLoading(true)
+                .displayer(new FadeInBitmapDisplayer(700))
+                .build();
+
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                .defaultDisplayImageOptions(options)
+                .memoryCacheSizePercentage(5)
+                .build();
+
+        ImageLoader.getInstance().init(config);
     }
 
     public ApiManager getApiManager(){

@@ -9,6 +9,7 @@ import com.codika.androidmvp.activity.BaseMvpActivity;
 import com.nacho91.snapshot.R;
 import com.nacho91.snapshot.model.Photo;
 import com.nacho91.snapshot.photos.adapter.PhotoAdapter;
+import com.nacho91.snapshot.photos.util.PhotoMarginDecoration;
 
 import java.util.List;
 
@@ -26,6 +27,8 @@ public class PhotoActivity extends BaseMvpActivity<PhotosView, PhotosPresenter> 
         setContentView(R.layout.activity_photos);
 
         photoList = (RecyclerView) findViewById(R.id.photo_list);
+        photoList.addItemDecoration(new PhotoMarginDecoration(getResources().getDimensionPixelSize(R.dimen.photo_item_spacing)));
+        photoList.setHasFixedSize(true);
     }
 
     @Override

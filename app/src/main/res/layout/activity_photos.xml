@@ -9,7 +9,10 @@
         android:id="@+id/photo_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        android:padding="@dimen/photo_item_spacing"
+        android:clipToPadding="false"
+        app:spanCount="@integer/photo_span_count"
+        app:layoutManager="android.support.v7.widget.StaggeredGridLayoutManager"
         app:reverseLayout="false"/>
 
 </LinearLayout>

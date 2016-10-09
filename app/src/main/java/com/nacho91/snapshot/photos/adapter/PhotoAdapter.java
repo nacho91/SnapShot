@@ -4,10 +4,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nacho91.snapshot.R;
 import com.nacho91.snapshot.model.Photo;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -33,6 +35,8 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder>
 
         Photo photo = photos.get(position);
 
+        ImageLoader.getInstance().displayImage(photo.getUrl(), holder.image);
+
         holder.title.setText(photo.getTitle());
     }
 
@@ -43,11 +47,13 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder>
 
     public static class PhotoHolder extends RecyclerView.ViewHolder{
 
+        ImageView image;
         TextView title;
 
         public PhotoHolder(View itemView) {
             super(itemView);
 
+            image = (ImageView) itemView.findViewById(R.id.photo_image);
             title = (TextView) itemView.findViewById(R.id.photo_title);
         }
     }
