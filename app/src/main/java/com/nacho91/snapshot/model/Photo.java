@@ -1,5 +1,7 @@
 package com.nacho91.snapshot.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Flickr photo model
  */
@@ -9,12 +11,15 @@ public class Photo {
     private String id;
 
     /*Photo url*/
+    @SerializedName("url_z")
     private String url;
 
     /*Photo width*/
+    @SerializedName("width_m")
     private int width;
 
     /*Photo height*/
+    @SerializedName("height_m")
     private int height;
 
     /*Photo title*/

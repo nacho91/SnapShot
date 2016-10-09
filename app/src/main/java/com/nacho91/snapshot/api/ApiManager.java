@@ -1,7 +1,7 @@
 package com.nacho91.snapshot.api;
 
 import com.nacho91.snapshot.BuildConfig;
-import com.nacho91.snapshot.model.Page;
+import com.nacho91.snapshot.model.Response;
 
 import rx.Observable;
 
@@ -14,9 +14,9 @@ public class ApiManager {
 
     static final String RECENTS_METHOD = "flickr.photos.getRecent";
 
-    static final String URL_PHOTO_EXTRA = "url_m";
-    static final String FORMAT = "json";
+    static final String URL_PHOTO_EXTRA = "url_z";
     static final int ITEMS_PER_PAGE = 25;
+    static final String FORMAT = "json";
 
     private final SnapShotApi api;
 
@@ -24,7 +24,7 @@ public class ApiManager {
         this.api = api;
     }
 
-    public Observable<Page> recents(int page){
-        return api.recents(RECENTS_METHOD, BuildConfig.API_KEY, page, ITEMS_PER_PAGE, URL_PHOTO_EXTRA, FORMAT);
+    public Observable<Response> recents(int page){
+        return api.recents(RECENTS_METHOD, BuildConfig.API_KEY, page, ITEMS_PER_PAGE, URL_PHOTO_EXTRA, FORMAT, 1);
     }
 }

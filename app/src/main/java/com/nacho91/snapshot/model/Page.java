@@ -1,5 +1,7 @@
 package com.nacho91.snapshot.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -8,12 +10,14 @@ import java.util.List;
 public class Page {
 
     /*Current page number*/
+    @SerializedName("page")
     private int number;
 
     /*Total pages number*/
     private int pages;
 
     /*Photos per page*/
+    @SerializedName("photo")
     private List<Photo> photos;
 
     public int getNumber() {
