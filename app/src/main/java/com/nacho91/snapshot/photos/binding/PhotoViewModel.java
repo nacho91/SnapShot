@@ -10,10 +10,14 @@ public class PhotoViewModel {
 
     private String title;
     private String url;
+    private int height;
+    private int width;
 
     public PhotoViewModel(Photo photo){
         title = photo.getTitle();
         url = photo.getUrl();
+        height = photo.getHeight();
+        width = photo.getWidth();
     }
 
     public String getTitle() {
@@ -22,5 +26,13 @@ public class PhotoViewModel {
 
     public String getUrl() {
         return url;
+    }
+
+    public int getWidth(){
+        return width;
+    }
+
+    public int getHeight(){
+        return height;
     }
 }

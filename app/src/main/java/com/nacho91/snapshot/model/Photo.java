@@ -15,11 +15,11 @@ public class Photo {
     private String url;
 
     /*Photo width*/
-    @SerializedName("width_m")
+    @SerializedName("width_z")
     private int width;
 
     /*Photo height*/
-    @SerializedName("height_m")
+    @SerializedName("height_z")
     private int height;
 
     /*Photo title*/
