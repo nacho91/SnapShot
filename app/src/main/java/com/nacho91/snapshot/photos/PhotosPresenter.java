@@ -4,9 +4,14 @@ import com.codika.androidmvprx.presenter.BaseRxPresenter;
 import com.nacho91.snapshot.api.ApiManager;
 import com.nacho91.snapshot.model.Page;
 import com.nacho91.snapshot.model.Response;
+import com.nacho91.snapshot.photos.binding.PhotoViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -22,10 +27,24 @@ public class PhotosPresenter extends BaseRxPresenter<PhotosView> {
     }
 
     public void recents(){
-        addSubscription(apiManager.recents(1)
+        addSubscription(apiManager.recents(1).map(new Func1<Response, List<PhotoViewModel>>() {
+            @Override
+            public List<PhotoViewModel> call(Response response) {
+
+                List<PhotoViewModel> photos = new ArrayList<PhotoViewModel>();
+
+                Page page = response.getPage();
+
+                for (int index = 0; index < page.getPhotos().size(); index++) {
+                    photos.add(new PhotoViewModel(page.getPhotos().get(index)));
+                }
+
+                return photos;
+            }
+        })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<Response>() {
+                .subscribe(new Subscriber<List<PhotoViewModel>>() {
             @Override
             public void onCompleted() {
 
@@ -37,8 +56,8 @@ public class PhotosPresenter extends BaseRxPresenter<PhotosView> {
             }
 
             @Override
-            public void onNext(Response response) {
-                getView().onRecentsSuccess(response.getPage().getPhotos());
+            public void onNext(List<PhotoViewModel> photos) {
+                getView().onRecentsSuccess(photos);
             }
         }));
     }

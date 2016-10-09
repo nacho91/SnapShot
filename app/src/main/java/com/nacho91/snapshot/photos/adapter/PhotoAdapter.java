@@ -1,5 +1,6 @@
 package com.nacho91.snapshot.photos.adapter;
 
+import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nacho91.snapshot.R;
+import com.nacho91.snapshot.databinding.AdapterPhotoBinding;
 import com.nacho91.snapshot.model.Photo;
+import com.nacho91.snapshot.photos.binding.PhotoViewModel;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -19,25 +22,26 @@ import java.util.List;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder> {
 
-    private List<Photo> photos;
+    private List<PhotoViewModel> photos;
 
-    public PhotoAdapter(List<Photo> photos) {
+    public PhotoAdapter(List<PhotoViewModel> photos) {
         this.photos = photos;
     }
 
     @Override
     public PhotoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new PhotoHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_photo, parent, false));
+        return new PhotoHolder((AdapterPhotoBinding) DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.adapter_photo, parent, false));
     }
 
     @Override
     public void onBindViewHolder(PhotoHolder holder, int position) {
 
-        Photo photo = photos.get(position);
+        PhotoViewModel photo = photos.get(position);
 
-        ImageLoader.getInstance().displayImage(photo.getUrl(), holder.image);
-
-        holder.title.setText(photo.getTitle());
+        holder.binding.setPhoto(photo);
+        holder.binding.executePendingBindings();
+        ImageLoader.getInstance().displayImage(photo.getUrl(), holder.binding.photoImage);
     }
 
     @Override
@@ -47,14 +51,11 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder>
 
     public static class PhotoHolder extends RecyclerView.ViewHolder{
 
-        ImageView image;
-        TextView title;
+        AdapterPhotoBinding binding;
 
-        public PhotoHolder(View itemView) {
-            super(itemView);
-
-            image = (ImageView) itemView.findViewById(R.id.photo_image);
-            title = (TextView) itemView.findViewById(R.id.photo_title);
+        public PhotoHolder(AdapterPhotoBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 }

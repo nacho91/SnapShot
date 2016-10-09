@@ -28,6 +28,10 @@ android {
             buildConfigField "String", API_KEY, "\"51bc57f735772063ff2764d10f408f93\""
         }
     }
+
+    dataBinding{
+        enabled true
+    }
 }
 
 dependencies {

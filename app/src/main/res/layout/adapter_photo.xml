@@ -1,29 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<layout>
+    <data>
+        <variable name="photo" type="com.nacho91.snapshot.photos.binding.PhotoViewModel"/>
+    </data>
 
-    <ImageView
-        android:id="@+id/photo_image"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@android:color/darker_gray"/>
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/photo_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/title"
-        android:background="@color/titleBackgrond"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp"
-        android:maxLines="2"
-        android:ellipsize="end"
-        android:layout_gravity="bottom"/>
+        <ImageView
+            android:id="@+id/photo_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@android:color/darker_gray"/>
 
-</FrameLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{photo.title}"
+            android:textColor="@color/title"
+            android:background="@color/titleBackgrond"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:layout_gravity="bottom"/>
+
+    </FrameLayout>
+</layout>

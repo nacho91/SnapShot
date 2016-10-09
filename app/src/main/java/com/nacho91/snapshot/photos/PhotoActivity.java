@@ -9,6 +9,7 @@ import com.codika.androidmvp.activity.BaseMvpActivity;
 import com.nacho91.snapshot.R;
 import com.nacho91.snapshot.model.Photo;
 import com.nacho91.snapshot.photos.adapter.PhotoAdapter;
+import com.nacho91.snapshot.photos.binding.PhotoViewModel;
 import com.nacho91.snapshot.photos.util.PhotoMarginDecoration;
 
 import java.util.List;
@@ -48,7 +49,7 @@ public class PhotoActivity extends BaseMvpActivity<PhotosView, PhotosPresenter> 
     }
 
     @Override
-    public void onRecentsSuccess(List<Photo> photos) {
+    public void onRecentsSuccess(List<PhotoViewModel> photos) {
         photoList.setAdapter(new PhotoAdapter(photos));
     }
 }
