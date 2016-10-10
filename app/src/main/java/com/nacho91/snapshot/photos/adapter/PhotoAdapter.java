@@ -49,6 +49,12 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder>
         return photos.size();
     }
 
+    public void refresh(List<PhotoViewModel> photos) {
+        this.photos.clear();
+        this.photos.addAll(photos);
+        notifyDataSetChanged();
+    }
+
     public static class PhotoHolder extends RecyclerView.ViewHolder{
 
         AdapterPhotoBinding binding;
