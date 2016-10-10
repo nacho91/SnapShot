@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 
 import com.codika.androidmvp.activity.BaseMvpActivity;
 import com.nacho91.snapshot.R;
-import com.nacho91.snapshot.model.Photo;
 import com.nacho91.snapshot.photos.adapter.PhotoAdapter;
 import com.nacho91.snapshot.photos.binding.PhotoViewModel;
 import com.nacho91.snapshot.photos.util.PhotoMarginDecoration;

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.nacho91.snapshot.R;
 import com.nacho91.snapshot.databinding.AdapterPhotoBinding;
 import com.nacho91.snapshot.model.Photo;
+import com.nacho91.snapshot.photos.binding.PhotoActionHandler;
 import com.nacho91.snapshot.photos.binding.PhotoViewModel;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -40,6 +41,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder>
         PhotoViewModel photo = photos.get(position);
 
         holder.binding.setPhoto(photo);
+        holder.binding.setHandler(new PhotoActionHandler());
         holder.binding.executePendingBindings();
         ImageLoader.getInstance().displayImage(photo.getUrl(), holder.binding.photoImage);
     }

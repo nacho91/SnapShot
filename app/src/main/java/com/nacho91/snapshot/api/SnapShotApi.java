@@ -1,6 +1,7 @@
 package com.nacho91.snapshot.api;
 
-import com.nacho91.snapshot.model.Response;
+import com.nacho91.snapshot.model.InfoResponse;
+import com.nacho91.snapshot.model.PhotosResponse;
 
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -14,11 +15,18 @@ import rx.Observable;
 public interface SnapShotApi {
 
     @GET("./")
-    Observable<Response> recents(@Query("method") String method,
-                                 @Query("api_key") String apiKey,
-                                 @Query("page") int page,
-                                 @Query("per_page") int perPage,
-                                 @Query("extras") String extras,
-                                 @Query("format") String format,
-                                 @Query("nojsoncallback") int noJsonCallback);
+    Observable<PhotosResponse> recents(@Query("method") String method,
+                                       @Query("api_key") String apiKey,
+                                       @Query("page") int page,
+                                       @Query("per_page") int perPage,
+                                       @Query("extras") String extras,
+                                       @Query("format") String format,
+                                       @Query("nojsoncallback") int noJsonCallback);
+
+    @GET("./")
+    Observable<InfoResponse> info(@Query("method") String method,
+                                  @Query("api_key") String apiKey,
+                                  @Query("photo_id") String photoId,
+                                  @Query("format") String format,
+                                  @Query("nojsoncallback") int noJsonCallback);
 }

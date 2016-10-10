@@ -1,7 +1,8 @@
 package com.nacho91.snapshot.api;
 
 import com.nacho91.snapshot.BuildConfig;
-import com.nacho91.snapshot.model.Response;
+import com.nacho91.snapshot.model.InfoResponse;
+import com.nacho91.snapshot.model.PhotosResponse;
 
 import rx.Observable;
 
@@ -13,6 +14,7 @@ import rx.Observable;
 public class ApiManager {
 
     static final String RECENTS_METHOD = "flickr.photos.getRecent";
+    static final String INFO_METHOD = "flickr.photos.getInfo";
 
     static final String URL_PHOTO_EXTRA = "url_z";
     static final int ITEMS_PER_PAGE = 25;
@@ -24,7 +26,11 @@ public class ApiManager {
         this.api = api;
     }
 
-    public Observable<Response> recents(int page){
+    public Observable<PhotosResponse> recents(int page){
         return api.recents(RECENTS_METHOD, BuildConfig.API_KEY, page, ITEMS_PER_PAGE, URL_PHOTO_EXTRA, FORMAT, 1);
+    }
+
+    public Observable<InfoResponse> info(String photoId){
+        return api.info(INFO_METHOD, BuildConfig.API_KEY, photoId, FORMAT, 1);
     }
 }

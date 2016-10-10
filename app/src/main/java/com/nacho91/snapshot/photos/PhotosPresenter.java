@@ -3,7 +3,7 @@ package com.nacho91.snapshot.photos;
 import com.codika.androidmvprx.presenter.BaseRxPresenter;
 import com.nacho91.snapshot.api.ApiManager;
 import com.nacho91.snapshot.model.Page;
-import com.nacho91.snapshot.model.Response;
+import com.nacho91.snapshot.model.PhotosResponse;
 import com.nacho91.snapshot.photos.binding.PhotoViewModel;
 
 import java.util.ArrayList;
@@ -27,9 +27,9 @@ public class PhotosPresenter extends BaseRxPresenter<PhotosView> {
     }
 
     public void recents(){
-        addSubscription(apiManager.recents(1).map(new Func1<Response, List<PhotoViewModel>>() {
+        addSubscription(apiManager.recents(1).map(new Func1<PhotosResponse, List<PhotoViewModel>>() {
             @Override
-            public List<PhotoViewModel> call(Response response) {
+            public List<PhotoViewModel> call(PhotosResponse response) {
 
                 List<PhotoViewModel> photos = new ArrayList<PhotoViewModel>();
 

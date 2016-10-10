@@ -8,16 +8,22 @@ import com.nacho91.snapshot.model.Photo;
 
 public class PhotoViewModel {
 
+    private String id;
     private String title;
     private String url;
     private int height;
     private int width;
 
     public PhotoViewModel(Photo photo){
+        id = photo.getId();
         title = photo.getTitle();
         url = photo.getUrl();
         height = photo.getHeight();
         width = photo.getWidth();
+    }
+
+    public String getId(){
+        return id;
     }
 
     public String getTitle() {

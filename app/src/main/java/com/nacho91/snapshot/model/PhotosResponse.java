@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by Ignacio on 9/10/2016.
  */
-public class Response {
+public class PhotosResponse {
 
     @SerializedName("photos")
     private Page page;
