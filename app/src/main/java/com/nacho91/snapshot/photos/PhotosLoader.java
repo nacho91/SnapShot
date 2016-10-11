@@ -11,15 +11,18 @@ import com.nacho91.snapshot.SnapShotApplication;
 
 public class PhotosLoader extends PresenterLoader<PhotosPresenter> {
 
+    private PhotosComponent component;
+
     public PhotosLoader(Context context) {
         super(context);
+
+        SnapShotApplication app = (SnapShotApplication) getContext().getApplicationContext();
+
+        component = DaggerPhotosComponent.builder().appComponent(app.getAppComponent()).build();
     }
 
     @Override
     public PhotosPresenter getPresenter() {
-
-        SnapShotApplication app = (SnapShotApplication) getContext().getApplicationContext();
-
-        return new PhotosPresenter(app.getApiManager());
+        return component.getPresenter();
     }
 }

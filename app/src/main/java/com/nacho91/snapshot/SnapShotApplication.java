@@ -4,6 +4,9 @@ import android.app.Application;
 
 import com.nacho91.snapshot.api.ApiManager;
 import com.nacho91.snapshot.api.SnapShotApi;
+import com.nacho91.snapshot.dagger.AppComponent;
+import com.nacho91.snapshot.dagger.DaggerAppComponent;
+import com.nacho91.snapshot.dagger.module.AppModule;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -21,38 +24,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SnapShotApplication extends Application {
 
-    private ApiManager apiManager;
+    private AppComponent appComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        apiManager = new ApiManager(provideSubteApi(provideOkHttpClient()));
+        appComponent = DaggerAppComponent.builder()
+                .appModule(new AppModule(this))
+                .build();
 
         initImageLoader();
     }
 
-    private OkHttpClient provideOkHttpClient(){
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-
-        if(BuildConfig.DEBUG)
-            httpClient.interceptors().add(logging);
-
-        return httpClient.build();
-    }
-
-    private SnapShotApi provideSubteApi(OkHttpClient client){
-        Retrofit retrofit = new Retrofit.Builder()
-                .client(client)
-                .baseUrl(BuildConfig.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-
-        return retrofit.create(SnapShotApi.class);
+    public AppComponent getAppComponent() {
+        return appComponent;
     }
 
     private void initImageLoader(){
@@ -70,9 +56,5 @@ public class SnapShotApplication extends Application {
                 .build();
 
         ImageLoader.getInstance().init(config);
-    }
-
-    public ApiManager getApiManager(){
-        return apiManager;
     }
 }

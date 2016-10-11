@@ -4,6 +4,8 @@ import com.codika.androidmvprx.presenter.BaseRxPresenter;
 import com.nacho91.snapshot.api.ApiManager;
 import com.nacho91.snapshot.model.InfoResponse;
 
+import javax.inject.Inject;
+
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -16,6 +18,7 @@ public class DetailPresenter extends BaseRxPresenter<DetailView> {
 
     private final ApiManager apiManager;
 
+    @Inject
     public DetailPresenter(ApiManager apiManager) {
         this.apiManager = apiManager;
     }

@@ -9,6 +9,8 @@ import com.nacho91.snapshot.photos.binding.PhotoViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
@@ -22,6 +24,7 @@ public class PhotosPresenter extends BaseRxPresenter<PhotosView> {
 
     private final ApiManager apiManager;
 
+    @Inject
     public PhotosPresenter(ApiManager apiManager) {
         this.apiManager = apiManager;
     }

@@ -12,14 +12,18 @@ import com.nacho91.snapshot.photos.PhotosPresenter;
 
 public class DetailLoader extends PresenterLoader<DetailPresenter> {
 
+    private DetailComponent component;
+
     public DetailLoader(Context context) {
         super(context);
+
+        SnapShotApplication app = (SnapShotApplication) getContext().getApplicationContext();
+
+        component = DaggerDetailComponent.builder().appComponent(app.getAppComponent()).build();
     }
 
     @Override
     public DetailPresenter getPresenter() {
-        SnapShotApplication app = (SnapShotApplication) getContext().getApplicationContext();
-
-        return new DetailPresenter(app.getApiManager());
+        return component.getPresenter();
     }
 }

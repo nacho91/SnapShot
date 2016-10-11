@@ -70,7 +70,7 @@ public class PhotoActivity extends BaseMvpActivity<PhotosView, PhotosPresenter> 
         MenuItem searchItem = menu.findItem(R.id.photos_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         RxSearchView.queryTextChangeEvents(searchView)
-                .debounce(400, TimeUnit.MILLISECONDS)<
+                .debounce(400, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getSearchObserver());
 
