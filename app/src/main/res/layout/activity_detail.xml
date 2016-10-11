@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable name="detail" type="com.nacho91.snapshot.detail.binding.DetailViewModel"/>
+    </data>
+
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/detail_root"
     android:layout_height="match_parent"
@@ -28,10 +34,10 @@
                     android:id="@+id/detail_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:paddingTop="24dp"
                     android:layout_marginBottom="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:transitionName="@string/transition_title"/>
 
@@ -41,7 +47,18 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
+                    android:text="@{detail.username}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+
+                <TextView
+                    android:id="@+id/detail_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:text="@{detail.date}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
 
             </LinearLayout>
 
@@ -56,3 +73,4 @@
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
+</layout>

@@ -2,6 +2,7 @@ package com.nacho91.snapshot.service;
 
 import com.nacho91.snapshot.api.ApiManager;
 import com.nacho91.snapshot.cache.CacheManager;
+import com.nacho91.snapshot.model.InfoResponse;
 import com.nacho91.snapshot.model.PhotosResponse;
 
 import rx.Observable;
@@ -43,6 +44,25 @@ public class ServiceManager {
             public void call(PhotosResponse photosResponse) {
                 cacheManager.deletePhotos();
                 cacheManager.savePhotos(photosResponse.getPage().getPhotos());
+            }
+        });
+    }
+
+    public Observable<InfoResponse> info(String photoId){
+        return Observable.concat(cacheManager.info(photoId), infoWithCache(photoId))
+                .filter(new Func1<InfoResponse, Boolean>() {
+                    @Override
+                    public Boolean call(InfoResponse infoResponse) {
+                        return infoResponse.getPhoto() != null;
+                    }
+                }).first();
+    }
+
+    private Observable<InfoResponse> infoWithCache(String photoId){
+        return apiManager.info(photoId).doOnNext(new Action1<InfoResponse>() {
+            @Override
+            public void call(InfoResponse infoResponse) {
+                cacheManager.saveInfo(infoResponse.getPhoto());
             }
         });
     }

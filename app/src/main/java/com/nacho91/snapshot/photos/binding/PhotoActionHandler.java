@@ -28,9 +28,9 @@ public class PhotoActionHandler {
         detail.putExtra(DetailActivity.EXTRA_PHOTO_ID, photoId);
         detail.putExtra(DetailActivity.EXTRA_PHOTO_URL, photoUrl);
         detail.putExtra(DetailActivity.EXTRA_PHOTO_TITLE, photoTitle);
-        detail.putExtra("TextColor", title.getCurrentTextColor());
-        detail.putExtra("TextSize", title.getTextSize());
-        detail.putExtra("Padding",
+        detail.putExtra(DetailActivity.EXTRA_TITLE_COLOR, title.getCurrentTextColor());
+        detail.putExtra(DetailActivity.EXTRA_TITLE_SIZE, title.getTextSize());
+        detail.putExtra(DetailActivity.EXTRA_TITLE_PADDING,
                 new Rect(title.getPaddingLeft(),
                         title.getPaddingTop(),
                         title.getPaddingRight(),

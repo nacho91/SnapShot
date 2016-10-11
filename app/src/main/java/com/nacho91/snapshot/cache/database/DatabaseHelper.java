@@ -6,6 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import com.nacho91.snapshot.model.Date;
+import com.nacho91.snapshot.model.InfoPhoto;
+import com.nacho91.snapshot.model.Owner;
 import com.nacho91.snapshot.model.Photo;
 
 import java.sql.SQLException;
@@ -27,6 +30,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         try {
             TableUtils.createTable(connectionSource, Photo.class);
+            TableUtils.createTable(connectionSource, InfoPhoto.class);
+            TableUtils.createTable(connectionSource, Owner.class);
+            TableUtils.createTable(connectionSource, Date.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }

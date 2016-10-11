@@ -1,6 +1,7 @@
 package com.nacho91.snapshot.detail;
 
 import com.codika.androidmvp.view.BaseView;
+import com.nacho91.snapshot.detail.binding.DetailViewModel;
 import com.nacho91.snapshot.model.InfoPhoto;
 
 /**
@@ -8,6 +9,6 @@ import com.nacho91.snapshot.model.InfoPhoto;
  */
 
 public interface DetailView extends BaseView {
-    void onInfoSuccess(InfoPhoto photo);
+    void onInfoSuccess(DetailViewModel detail);
     void onInfoNetworkError();
 }

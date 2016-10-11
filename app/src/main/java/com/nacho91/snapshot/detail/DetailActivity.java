@@ -2,6 +2,7 @@ package com.nacho91.snapshot.detail;
 
 import android.app.SharedElementCallback;
 import android.content.res.ColorStateList;
+import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
@@ -22,6 +23,8 @@ import android.widget.TextView;
 
 import com.codika.androidmvp.activity.BaseMvpActivity;
 import com.nacho91.snapshot.R;
+import com.nacho91.snapshot.databinding.ActivityDetailBinding;
+import com.nacho91.snapshot.detail.binding.DetailViewModel;
 import com.nacho91.snapshot.detail.widget.ThreeTwoImageView;
 import com.nacho91.snapshot.model.InfoPhoto;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -40,14 +43,17 @@ public class DetailActivity extends BaseMvpActivity<DetailView, DetailPresenter>
     public static final String EXTRA_PHOTO_ID = "_PHOTO_ID_";
     public static final String EXTRA_PHOTO_URL = "_PHOTO_URL_";
     public static final String EXTRA_PHOTO_TITLE = "_PHOTO_TITLE_";
+    public static final String EXTRA_TITLE_PADDING = "_TITLE_PADDING_";
+    public static final String EXTRA_TITLE_SIZE = "_TITLE_SIZE_";
+    public static final String EXTRA_TITLE_COLOR = "_TITLE_COLOR_";
 
-    private CoordinatorLayout detailRoot;
     private ThreeTwoImageView detailImage;
     private TextView detailTitle;
-    private TextView detailUsername;
 
     private float targetTextSize;
     private ColorStateList targetTextColors;
+
+    private ActivityDetailBinding binding;
 
     private SharedElementCallback elementCallback = new SharedElementCallback() {
 
@@ -57,10 +63,10 @@ public class DetailActivity extends BaseMvpActivity<DetailView, DetailPresenter>
                                          List<View> sharedElementSnapshots) {
             targetTextSize = detailTitle.getTextSize();
             targetTextColors = detailTitle.getTextColors();
-            float textSize = getIntent().getFloatExtra("TextSize", targetTextSize);
+            float textSize = getIntent().getFloatExtra(EXTRA_TITLE_SIZE, targetTextSize);
             detailTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-            detailTitle.setTextColor(getIntent().getIntExtra("TextColor", Color.BLACK));
-            Rect padding = getIntent().getParcelableExtra("Padding");
+            detailTitle.setTextColor(getIntent().getIntExtra(EXTRA_TITLE_COLOR, Color.BLACK));
+            Rect padding = getIntent().getParcelableExtra(EXTRA_TITLE_PADDING);
             detailTitle.setPadding(padding.left, padding.top, padding.right, padding.bottom);
         }
 
@@ -77,16 +83,13 @@ public class DetailActivity extends BaseMvpActivity<DetailView, DetailPresenter>
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.detailToolbar);
 
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_arrow);
-
-        detailRoot = (CoordinatorLayout) findViewById(R.id.detail_root);
 
         DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
@@ -99,8 +102,6 @@ public class DetailActivity extends BaseMvpActivity<DetailView, DetailPresenter>
 
         detailTitle = (TextView) findViewById(R.id.detail_title);
         detailTitle.setText(getIntent().getStringExtra(EXTRA_PHOTO_TITLE));
-
-        detailUsername = (TextView) findViewById(R.id.detail_username);
 
         setEnterSharedElementCallback(elementCallback);
     }
@@ -141,14 +142,14 @@ public class DetailActivity extends BaseMvpActivity<DetailView, DetailPresenter>
     }
 
     @Override
-    public void onInfoSuccess(InfoPhoto photo) {
-        detailUsername.setText(photo.getOwner().getUsername());
+    public void onInfoSuccess(DetailViewModel detail) {
+        binding.setDetail(detail);
     }
 
     @Override
     public void onInfoNetworkError() {
 
-        Snackbar.make(detailRoot, R.string.general_connection_error_message, Snackbar.LENGTH_INDEFINITE)
+        Snackbar.make(binding.detailRoot, R.string.general_connection_error_message, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.general_retry_button, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

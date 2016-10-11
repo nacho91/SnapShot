@@ -46,6 +46,9 @@ public class PhotosPresenter extends BaseRxPresenter<PhotosView> {
             return;
         }
 
+        if(!refresh)
+            getView().showProgress();
+
         addSubscription(service.recents(refresh, 1)
                 .map(new Func1<PhotosResponse, List<PhotoViewModel>>() {
                     @Override
@@ -76,7 +79,7 @@ public class PhotosPresenter extends BaseRxPresenter<PhotosView> {
                     @Override
                     public List<PhotoViewModel> call(PhotosResponse response) {
 
-                        List<PhotoViewModel> photos = new ArrayList<PhotoViewModel>();
+                        List<PhotoViewModel> photos = new ArrayList<>();
 
                         Page page = response.getPage();
 
