@@ -9,4 +9,5 @@ import com.nacho91.snapshot.model.InfoPhoto;
 
 public interface DetailView extends BaseView {
     void onInfoSuccess(InfoPhoto photo);
+    void onInfoNetworkError();
 }

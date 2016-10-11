@@ -3,6 +3,7 @@ package com.nacho91.snapshot.dagger.module;
 
 import com.nacho91.snapshot.BuildConfig;
 import com.nacho91.snapshot.api.ApiManager;
+import com.nacho91.snapshot.api.RxApiCallAdapterFactory;
 import com.nacho91.snapshot.api.SnapShotApi;
 import com.nacho91.snapshot.dagger.scope.ApplicationScope;
 
@@ -41,7 +42,7 @@ public class ApiModule {
                 .client(client)
                 .baseUrl(BuildConfig.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxApiCallAdapterFactory.create())
                 .build();
 
         return retrofit.create(SnapShotApi.class);

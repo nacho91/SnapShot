@@ -2,6 +2,7 @@ package com.nacho91.snapshot.photos;
 
 import com.codika.androidmvprx.presenter.BaseRxPresenter;
 import com.nacho91.snapshot.api.ApiManager;
+import com.nacho91.snapshot.api.ApiSubscriber;
 import com.nacho91.snapshot.model.Page;
 import com.nacho91.snapshot.model.PhotosResponse;
 import com.nacho91.snapshot.photos.binding.PhotoViewModel;
@@ -30,75 +31,80 @@ public class PhotosPresenter extends BaseRxPresenter<PhotosView> {
     }
 
     public void recents(){
-        addSubscription(apiManager.recents(1).map(new Func1<PhotosResponse, List<PhotoViewModel>>() {
-            @Override
-            public List<PhotoViewModel> call(PhotosResponse response) {
+        addSubscription(apiManager.recents(1)
+                .map(new Func1<PhotosResponse, List<PhotoViewModel>>() {
+                    @Override
+                    public List<PhotoViewModel> call(PhotosResponse response) {
 
-                List<PhotoViewModel> photos = new ArrayList<PhotoViewModel>();
+                        List<PhotoViewModel> photos = new ArrayList<PhotoViewModel>();
 
-                Page page = response.getPage();
+                        Page page = response.getPage();
 
-                for (int index = 0; index < page.getPhotos().size(); index++) {
-                    photos.add(new PhotoViewModel(page.getPhotos().get(index)));
-                }
+                        for (int index = 0; index < page.getPhotos().size(); index++) {
+                            photos.add(new PhotoViewModel(page.getPhotos().get(index)));
+                        }
 
-                return photos;
-            }
-        })
+                        return photos;
+                    }
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<List<PhotoViewModel>>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(List<PhotoViewModel> photos) {
-                getView().onRecentsSuccess(photos);
-            }
-        }));
+                .subscribe(new RecentsSubscriber()));
     }
 
     public void search(String query){
         addSubscription(apiManager.search(query)
                 .map(new Func1<PhotosResponse, List<PhotoViewModel>>() {
-            @Override
-            public List<PhotoViewModel> call(PhotosResponse response) {
+                    @Override
+                    public List<PhotoViewModel> call(PhotosResponse response) {
 
-                List<PhotoViewModel> photos = new ArrayList<PhotoViewModel>();
+                        List<PhotoViewModel> photos = new ArrayList<PhotoViewModel>();
 
-                Page page = response.getPage();
+                        Page page = response.getPage();
 
-                for (int index = 0; index < page.getPhotos().size(); index++) {
-                    photos.add(new PhotoViewModel(page.getPhotos().get(index)));
-                }
+                        for (int index = 0; index < page.getPhotos().size(); index++) {
+                            photos.add(new PhotoViewModel(page.getPhotos().get(index)));
+                        }
 
-                return photos;
-            }
-        })
+                        return photos;
+                    }
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<List<PhotoViewModel>>() {
-                    @Override
-                    public void onCompleted() {
+                .subscribe(new SearchSubscriber()));
+    }
 
-                    }
+    private class RecentsSubscriber extends ApiSubscriber<List<PhotoViewModel>, String>{
 
-                    @Override
-                    public void onError(Throwable e) {
+        public RecentsSubscriber() {
+            super(String.class);
+        }
 
-                    }
+        @Override
+        public void onNetworkError() {
+            getView().onRecentsNetworkError();
+        }
 
-                    @Override
-                    public void onNext(List<PhotoViewModel> photos) {
-                        getView().onRecentsSuccess(photos);
-                    }
-                }));
+        @Override
+        public void onNext(List<PhotoViewModel> photos) {
+            getView().onRecentsSuccess(photos);
+        }
+    }
+
+    private class SearchSubscriber extends ApiSubscriber<List<PhotoViewModel>, String>{
+
+        public SearchSubscriber() {
+            super(String.class);
+        }
+
+        @Override
+        public void onNetworkError() {
+            super.onNetworkError();
+        }
+
+        @Override
+        public void onNext(List<PhotoViewModel> photos) {
+            getView().onRecentsSuccess(photos);
+        }
     }
 }

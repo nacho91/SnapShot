@@ -13,4 +13,5 @@ import java.util.List;
 public interface PhotosView extends BaseView {
 
     void onRecentsSuccess(List<PhotoViewModel> photos);
+    void onRecentsNetworkError();
 }

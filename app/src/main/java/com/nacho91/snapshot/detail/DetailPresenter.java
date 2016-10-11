@@ -2,6 +2,7 @@ package com.nacho91.snapshot.detail;
 
 import com.codika.androidmvprx.presenter.BaseRxPresenter;
 import com.nacho91.snapshot.api.ApiManager;
+import com.nacho91.snapshot.api.ApiSubscriber;
 import com.nacho91.snapshot.model.InfoResponse;
 
 import javax.inject.Inject;
@@ -27,21 +28,23 @@ public class DetailPresenter extends BaseRxPresenter<DetailView> {
         addSubscription(apiManager.info(photoId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<InfoResponse>() {
-                    @Override
-                    public void onCompleted() {
+                .subscribe(new DetailSubscriber()));
+    }
 
-                    }
+    private class DetailSubscriber extends ApiSubscriber<InfoResponse, String>{
 
-                    @Override
-                    public void onError(Throwable e) {
+        public DetailSubscriber() {
+            super(String.class);
+        }
 
-                    }
+        @Override
+        public void onNetworkError() {
+            getView().onInfoNetworkError();
+        }
 
-                    @Override
-                    public void onNext(InfoResponse infoResponse) {
-                        getView().onInfoSuccess(infoResponse.getPhoto());
-                    }
-                }));
+        @Override
+        public void onNext(InfoResponse infoResponse) {
+            getView().onInfoSuccess(infoResponse.getPhoto());
+        }
     }
 }

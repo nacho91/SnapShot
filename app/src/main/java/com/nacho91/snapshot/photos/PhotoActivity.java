@@ -2,6 +2,8 @@ package com.nacho91.snapshot.photos;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,6 +12,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.codika.androidmvp.activity.BaseMvpActivity;
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
@@ -33,6 +36,7 @@ import rx.functions.Func1;
 
 public class PhotoActivity extends BaseMvpActivity<PhotosView, PhotosPresenter> implements PhotosView{
 
+    private CoordinatorLayout photoRoot;
     private SwipeRefreshLayout photoRefresh;
     private RecyclerView photoList;
 
@@ -43,6 +47,8 @@ public class PhotoActivity extends BaseMvpActivity<PhotosView, PhotosPresenter> 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.photo_toolbar);
         setSupportActionBar(toolbar);
+
+        photoRoot = (CoordinatorLayout) findViewById(R.id.photo_root);
 
         photoRefresh = (SwipeRefreshLayout) findViewById(R.id.photo_refresh);
         photoRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -99,6 +105,19 @@ public class PhotoActivity extends BaseMvpActivity<PhotosView, PhotosPresenter> 
             PhotoAdapter adapter = (PhotoAdapter) photoList.getAdapter();
             adapter.refresh(photos);
         }
+    }
+
+    @Override
+    public void onRecentsNetworkError() {
+
+        Snackbar.make(photoRoot, R.string.general_connection_error_message, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.general_retry_button, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        getPresenter().recents();
+                    }
+                })
+                .show();
     }
 
     private Observer<SearchViewQueryTextEvent> getSearchObserver(){

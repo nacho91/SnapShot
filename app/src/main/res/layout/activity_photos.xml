@@ -1,31 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/photo_root"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/photo_toolbar"
+    <RelativeLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:background="@color/colorPrimary"
-        android:layout_height="?android:actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+        android:layout_height="match_parent">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/photo_refresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/photo_toolbar">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/photo_toolbar"
+            android:layout_width="match_parent"
+            android:background="@color/colorPrimary"
+            android:layout_height="?android:actionBarSize"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/photo_list"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/photo_refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/photo_item_spacing"
-            android:clipToPadding="false"
-            app:spanCount="@integer/photo_span_count"
-            app:layoutManager="android.support.v7.widget.StaggeredGridLayoutManager"
-            app:reverseLayout="false"/>
+            android:layout_below="@+id/photo_toolbar">
 
-    </android.support.v4.widget.SwipeRefreshLayout>
-</RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/photo_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/photo_item_spacing"
+                android:clipToPadding="false"
+                app:spanCount="@integer/photo_span_count"
+                app:layoutManager="android.support.v7.widget.StaggeredGridLayoutManager"
+                app:reverseLayout="false"/>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>
