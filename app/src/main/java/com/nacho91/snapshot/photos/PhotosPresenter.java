@@ -25,19 +25,33 @@ public class PhotosPresenter extends BaseRxPresenter<PhotosView> {
 
     private final ServiceManager service;
 
+    private List<PhotoViewModel> photos;
+
     @Inject
     public PhotosPresenter(ServiceManager service) {
         this.service = service;
     }
 
+    @Override
+    public void onAttachView(PhotosView view) {
+        super.onAttachView(view);
+        if(photos != null){
+            getView().onRecentsSuccess(photos);
+        }
+    }
+
     public void recents(boolean refresh){
+
+        if(!refresh && photos != null){
+            return;
+        }
 
         addSubscription(service.recents(refresh, 1)
                 .map(new Func1<PhotosResponse, List<PhotoViewModel>>() {
                     @Override
                     public List<PhotoViewModel> call(PhotosResponse response) {
 
-                        List<PhotoViewModel> photos = new ArrayList<PhotoViewModel>();
+                        List<PhotoViewModel> photos = new ArrayList<>();
 
                         Page page = response.getPage();
 
@@ -78,6 +92,10 @@ public class PhotosPresenter extends BaseRxPresenter<PhotosView> {
                 .subscribe(new SearchSubscriber()));
     }
 
+    public void setPhotos(List<PhotoViewModel> photos) {
+        this.photos = photos;
+    }
+
     private class RecentsSubscriber extends ApiSubscriber<List<PhotoViewModel>, String>{
 
         public RecentsSubscriber() {
@@ -103,6 +121,7 @@ public class PhotosPresenter extends BaseRxPresenter<PhotosView> {
 
         @Override
         public void onNext(List<PhotoViewModel> photos) {
+            setPhotos(photos);
             getView().onRecentsSuccess(photos);
         }
     }

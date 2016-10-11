@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="App.Home">
+        <item name="android:windowExitTransition">@transition/photos_exit</item>
+        <item name="android:windowReenterTransition">@transition/photos_reenter</item>
+    </style>
+
+    <style name="App.Details">
+        <item name="android:windowSharedElementEnterTransition">@transition/shared_main_detail</item>
+    </style>
+
+</resources>

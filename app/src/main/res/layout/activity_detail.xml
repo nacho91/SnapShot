@@ -8,28 +8,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/detail_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?android:actionBarSize" />
-
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
-
 
                 <com.nacho91.snapshot.detail.widget.ThreeTwoImageView
                     android:id="@+id/detail_image"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:scaleType="centerCrop" />
-
+                    android:scaleType="centerCrop"
+                    android:transitionName="@string/transition_image"/>
 
                 <TextView
                     android:id="@+id/detail_title"
@@ -39,7 +32,8 @@
                     android:layout_marginBottom="16dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:transitionName="@string/transition_title"/>
 
                 <TextView
                     android:id="@+id/detail_username"
@@ -52,6 +46,12 @@
             </LinearLayout>
 
         </ScrollView>
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/detail_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     </RelativeLayout>
 

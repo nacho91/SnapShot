@@ -38,7 +38,8 @@
             android:id="@+id/photo_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true"
+            android:visibility="invisible"/>
 
     </RelativeLayout>
 

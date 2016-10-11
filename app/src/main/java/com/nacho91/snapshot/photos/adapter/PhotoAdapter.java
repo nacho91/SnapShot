@@ -66,4 +66,5 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder>
             this.binding = binding;
         }
     }
+
 }

@@ -10,7 +10,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> handler.onPhotoClick(context, photo.id, photo.url, photo.title)}">
+        android:onClick="@{() -> handler.onPhotoClick(context, photoImage, photoTitle, photo.id, photo.url, photo.title)}">
 
         <ImageView
             android:id="@+id/photo_image"
@@ -18,9 +18,11 @@
             android:layout_height="wrap_content"
             app:height="@{photo.height}"
             app:width="@{photo.width}"
+            android:transitionName="@{@string/transition_image + photo.id}"
             android:background="@android:color/darker_gray"/>
 
         <TextView
+            android:id="@+id/photo_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{photo.title}"
@@ -34,6 +36,7 @@
             android:paddingStart="16dp"
             android:maxLines="2"
             android:ellipsize="end"
+            android:transitionName='@{@string/transition_title + photo.id}'
             android:layout_gravity="bottom"/>
 
     </FrameLayout>

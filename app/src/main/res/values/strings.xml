@@ -5,4 +5,8 @@
     <string name="general_retry_button">Volver a intentarlo</string>
 
     <string name="menu_photos_search">Buscar</string>
+
+    <string name="transition_image">transition_image</string>
+    <string name="transition_title">transition_title</string>
+
 </resources>
