@@ -61,4 +61,41 @@ public class PhotosPresenter extends BaseRxPresenter<PhotosView> {
             }
         }));
     }
+
+    public void search(String query){
+        addSubscription(apiManager.search(query)
+                .map(new Func1<PhotosResponse, List<PhotoViewModel>>() {
+            @Override
+            public List<PhotoViewModel> call(PhotosResponse response) {
+
+                List<PhotoViewModel> photos = new ArrayList<PhotoViewModel>();
+
+                Page page = response.getPage();
+
+                for (int index = 0; index < page.getPhotos().size(); index++) {
+                    photos.add(new PhotoViewModel(page.getPhotos().get(index)));
+                }
+
+                return photos;
+            }
+        })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<List<PhotoViewModel>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<PhotoViewModel> photos) {
+                        getView().onRecentsSuccess(photos);
+                    }
+                }));
+    }
 }

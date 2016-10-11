@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SnapShot</string>
+
+    <string name="menu_photos_search">Buscar</string>
 </resources>

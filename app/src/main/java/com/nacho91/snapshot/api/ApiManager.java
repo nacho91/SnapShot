@@ -5,6 +5,7 @@ import com.nacho91.snapshot.model.InfoResponse;
 import com.nacho91.snapshot.model.PhotosResponse;
 
 import rx.Observable;
+import rx.Observer;
 
 
 /**
@@ -14,6 +15,7 @@ import rx.Observable;
 public class ApiManager {
 
     static final String RECENTS_METHOD = "flickr.photos.getRecent";
+    static final String SEARCH_METHOD = "flickr.photos.search";
     static final String INFO_METHOD = "flickr.photos.getInfo";
 
     static final String URL_PHOTO_EXTRA = "url_z";
@@ -32,5 +34,9 @@ public class ApiManager {
 
     public Observable<InfoResponse> info(String photoId){
         return api.info(INFO_METHOD, BuildConfig.API_KEY, photoId, FORMAT, 1);
+    }
+
+    public Observable<PhotosResponse> search(String query){
+        return api.search(SEARCH_METHOD, BuildConfig.API_KEY, 1, ITEMS_PER_PAGE, query, URL_PHOTO_EXTRA, FORMAT, 1);
     }
 }

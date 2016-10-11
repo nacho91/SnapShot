@@ -3,16 +3,29 @@ package com.nacho91.snapshot.photos;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.codika.androidmvp.activity.BaseMvpActivity;
+import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
+import com.jakewharton.rxbinding.support.v7.widget.SearchViewQueryTextEvent;
+import com.jakewharton.rxbinding.widget.TextViewTextChangeEvent;
 import com.nacho91.snapshot.R;
 import com.nacho91.snapshot.photos.adapter.PhotoAdapter;
 import com.nacho91.snapshot.photos.binding.PhotoViewModel;
 import com.nacho91.snapshot.photos.util.PhotoMarginDecoration;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 
 /**
  * Created by Ignacio on 9/10/2016.
@@ -27,6 +40,9 @@ public class PhotoActivity extends BaseMvpActivity<PhotosView, PhotosPresenter> 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photos);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.photo_toolbar);
+        setSupportActionBar(toolbar);
 
         photoRefresh = (SwipeRefreshLayout) findViewById(R.id.photo_refresh);
         photoRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -45,6 +61,20 @@ public class PhotoActivity extends BaseMvpActivity<PhotosView, PhotosPresenter> 
     public void onResume() {
         super.onResume();
         getPresenter().recents();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_photos, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.photos_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        RxSearchView.queryTextChangeEvents(searchView)
+                .debounce(400, TimeUnit.MILLISECONDS)<
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getSearchObserver());
+
+        return true;
     }
 
     @Override
@@ -70,4 +100,29 @@ public class PhotoActivity extends BaseMvpActivity<PhotosView, PhotosPresenter> 
             adapter.refresh(photos);
         }
     }
+
+    private Observer<SearchViewQueryTextEvent> getSearchObserver(){
+        return new Observer<SearchViewQueryTextEvent>(){
+
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(SearchViewQueryTextEvent textViewTextChangeEvent) {
+                if(textViewTextChangeEvent.queryText().length() == 0){
+                    getPresenter().recents();
+                    return;
+                }
+                getPresenter().search(textViewTextChangeEvent.queryText().toString());
+            }
+        };
+    }
+
 }

@@ -23,6 +23,17 @@ public interface SnapShotApi {
                                        @Query("format") String format,
                                        @Query("nojsoncallback") int noJsonCallback);
 
+
+    @GET("./")
+    Observable<PhotosResponse> search(@Query("method") String method,
+                                      @Query("api_key") String apiKey,
+                                      @Query("page") int page,
+                                      @Query("per_page") int perPage,
+                                      @Query("text") String text,
+                                      @Query("extras") String extras,
+                                      @Query("format") String format,
+                                      @Query("nojsoncallback") int noJsonCallback);
+
     @GET("./")
     Observable<InfoResponse> info(@Query("method") String method,
                                   @Query("api_key") String apiKey,
