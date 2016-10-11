@@ -1,6 +1,5 @@
 package com.nacho91.snapshot.dagger.module;
 
-
 import com.nacho91.snapshot.BuildConfig;
 import com.nacho91.snapshot.api.ApiManager;
 import com.nacho91.snapshot.api.RxApiCallAdapterFactory;
@@ -12,7 +11,6 @@ import dagger.Provides;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -38,6 +36,7 @@ public class ApiModule {
     @Provides
     @ApplicationScope
     SnapShotApi provideSubteApi(OkHttpClient client){
+
         Retrofit retrofit = new Retrofit.Builder()
                 .client(client)
                 .baseUrl(BuildConfig.BASE_URL)

@@ -1,28 +1,36 @@
 package com.nacho91.snapshot.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 /**
  * Flickr photo model
  */
+@DatabaseTable(tableName = "photos")
 public class Photo {
 
     /*Phoot id*/
+    @DatabaseField(id = true)
     private String id;
 
     /*Photo url*/
+    @DatabaseField
     @SerializedName("url_z")
     private String url;
 
     /*Photo width*/
+    @DatabaseField
     @SerializedName("width_z")
     private int width;
 
     /*Photo height*/
+    @DatabaseField
     @SerializedName("height_z")
     private int height;
 
     /*Photo title*/
+    @DatabaseField
     private String title;
 
     public String getId() {

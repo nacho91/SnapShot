@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.codika.androidmvp.activity.BaseMvpActivity;
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
@@ -22,6 +23,7 @@ import com.nacho91.snapshot.R;
 import com.nacho91.snapshot.photos.adapter.PhotoAdapter;
 import com.nacho91.snapshot.photos.binding.PhotoViewModel;
 import com.nacho91.snapshot.photos.util.PhotoMarginDecoration;
+import com.nacho91.snapshot.util.AnimUtils;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -33,10 +35,10 @@ import rx.functions.Func1;
 /**
  * Created by Ignacio on 9/10/2016.
  */
-
 public class PhotoActivity extends BaseMvpActivity<PhotosView, PhotosPresenter> implements PhotosView{
 
     private CoordinatorLayout photoRoot;
+    private ProgressBar photoProgress;
     private SwipeRefreshLayout photoRefresh;
     private RecyclerView photoList;
 
@@ -54,19 +56,21 @@ public class PhotoActivity extends BaseMvpActivity<PhotosView, PhotosPresenter> 
         photoRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getPresenter().recents();
+                getPresenter().recents(true);
             }
         });
 
         photoList = (RecyclerView) findViewById(R.id.photo_list);
         photoList.addItemDecoration(new PhotoMarginDecoration(getResources().getDimensionPixelSize(R.dimen.photo_item_spacing)));
         photoList.setHasFixedSize(true);
+
+        photoProgress = (ProgressBar) findViewById(R.id.photo_progress);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getPresenter().recents();
+        getPresenter().recents(false);
     }
 
     @Override
@@ -93,12 +97,7 @@ public class PhotoActivity extends BaseMvpActivity<PhotosView, PhotosPresenter> 
         return new PhotosLoader(this);
     }
 
-    @Override
-    public void onRecentsSuccess(List<PhotoViewModel> photos) {
-
-        if(photoRefresh.isRefreshing())
-            photoRefresh.setRefreshing(false);
-
+    private void loadPhotos(List<PhotoViewModel> photos){
         if(photoList.getAdapter() == null)
             photoList.setAdapter(new PhotoAdapter(photos));
         else{
@@ -108,16 +107,51 @@ public class PhotoActivity extends BaseMvpActivity<PhotosView, PhotosPresenter> 
     }
 
     @Override
+    public void onRecentsSuccess(List<PhotoViewModel> photos) {
+        photoRefresh.setRefreshing(false);
+
+        loadPhotos(photos);
+    }
+
+    @Override
+    public void onSearchSuccess(List<PhotoViewModel> photos) {
+        loadPhotos(photos);
+    }
+
+    @Override
     public void onRecentsNetworkError() {
+        Snackbar.make(photoRoot, R.string.general_connection_error_message, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.general_retry_button, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        getPresenter().recents(false);
+                    }
+                })
+                .show();
+    }
+
+    @Override
+    public void onSearchNetworkError() {
+        photoRefresh.setRefreshing(false);
 
         Snackbar.make(photoRoot, R.string.general_connection_error_message, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.general_retry_button, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        getPresenter().recents();
+                        getPresenter().recents(true);
                     }
                 })
                 .show();
+    }
+
+    @Override
+    public void showProgress() {
+        AnimUtils.fadeInFadeOut(photoProgress, photoRefresh);
+    }
+
+    @Override
+    public void hideProgress() {
+        AnimUtils.fadeInFadeOut(photoRefresh, photoProgress);
     }
 
     private Observer<SearchViewQueryTextEvent> getSearchObserver(){
@@ -136,7 +170,7 @@ public class PhotoActivity extends BaseMvpActivity<PhotosView, PhotosPresenter> 
             @Override
             public void onNext(SearchViewQueryTextEvent textViewTextChangeEvent) {
                 if(textViewTextChangeEvent.queryText().length() == 0){
-                    getPresenter().recents();
+                    getPresenter().recents(false);
                     return;
                 }
                 getPresenter().search(textViewTextChangeEvent.queryText().toString());

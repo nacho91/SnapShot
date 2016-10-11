@@ -6,13 +6,13 @@ import com.nacho91.snapshot.api.ApiSubscriber;
 import com.nacho91.snapshot.model.Page;
 import com.nacho91.snapshot.model.PhotosResponse;
 import com.nacho91.snapshot.photos.binding.PhotoViewModel;
+import com.nacho91.snapshot.service.ServiceManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -23,15 +23,16 @@ import rx.schedulers.Schedulers;
 
 public class PhotosPresenter extends BaseRxPresenter<PhotosView> {
 
-    private final ApiManager apiManager;
+    private final ServiceManager service;
 
     @Inject
-    public PhotosPresenter(ApiManager apiManager) {
-        this.apiManager = apiManager;
+    public PhotosPresenter(ServiceManager service) {
+        this.service = service;
     }
 
-    public void recents(){
-        addSubscription(apiManager.recents(1)
+    public void recents(boolean refresh){
+
+        addSubscription(service.recents(refresh, 1)
                 .map(new Func1<PhotosResponse, List<PhotoViewModel>>() {
                     @Override
                     public List<PhotoViewModel> call(PhotosResponse response) {
@@ -53,7 +54,10 @@ public class PhotosPresenter extends BaseRxPresenter<PhotosView> {
     }
 
     public void search(String query){
-        addSubscription(apiManager.search(query)
+
+        getView().showProgress();
+
+        addSubscription(service.search(query)
                 .map(new Func1<PhotosResponse, List<PhotoViewModel>>() {
                     @Override
                     public List<PhotoViewModel> call(PhotosResponse response) {
@@ -81,6 +85,18 @@ public class PhotosPresenter extends BaseRxPresenter<PhotosView> {
         }
 
         @Override
+        public void onCompleted() {
+            super.onCompleted();
+            getView().hideProgress();
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+            getView().hideProgress();
+        }
+
+        @Override
         public void onNetworkError() {
             getView().onRecentsNetworkError();
         }
@@ -98,13 +114,25 @@ public class PhotosPresenter extends BaseRxPresenter<PhotosView> {
         }
 
         @Override
+        public void onCompleted() {
+            super.onCompleted();
+            getView().hideProgress();
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+            getView().hideProgress();
+        }
+
+        @Override
         public void onNetworkError() {
-            super.onNetworkError();
+           getView().onSearchNetworkError();
         }
 
         @Override
         public void onNext(List<PhotoViewModel> photos) {
-            getView().onRecentsSuccess(photos);
+            getView().onSearchSuccess(photos);
         }
     }
 }
